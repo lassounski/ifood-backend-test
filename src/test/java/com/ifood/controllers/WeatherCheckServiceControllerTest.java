@@ -5,6 +5,7 @@ import static org.mockito.Matchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -46,7 +47,29 @@ public class WeatherCheckServiceControllerTest {
 
         mockMvc.perform(asyncDispatch(result))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("name").value("Campinas"));
+                .andExpect(jsonPath("name").value("Campinas"))
+                .andExpect(jsonPath("main.temp").value(295.15));
+    }
+
+    @Test
+    public void shouldReturn503ifError() throws Exception {
+        given(weatherCheckService.getCityWeatherData(any()))
+                .willReturn(CompletableFuture.supplyAsync(() -> {
+                    throwException();
+                    return getCityWeather();
+                }));
+
+        MvcResult result = mockMvc.perform(get("/weather").param("city", "campinas"))
+                .andDo(print())
+                .andReturn();
+
+        mockMvc.perform(asyncDispatch(result))
+                .andExpect(status().is5xxServerError())
+                .andExpect(header().string("Description","There was an error while accesing Open Weather API"));
+    }
+
+    private void throwException() {
+        throw new RuntimeException();
     }
 
     public CityWeather getCityWeather() {

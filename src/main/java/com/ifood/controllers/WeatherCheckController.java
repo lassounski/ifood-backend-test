@@ -23,7 +23,11 @@ public class WeatherCheckController {
 
         weatherCheckService.getCityWeatherData(city)
                 .exceptionally(throwable -> {
-                    deferredResult.setResult(new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE));
+                    deferredResult.setResult(
+                            ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                                    .header("Description", "There was an error while accesing Open Weather API")
+                                    .build()
+                    );
                     return null;
                 })
                 .thenAccept(cityWeather -> deferredResult.setResult(new ResponseEntity<>(cityWeather, HttpStatus.OK)));

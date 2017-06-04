@@ -17,13 +17,13 @@ public class CacheConfiguration {
 
     public static final String CITY_WEATHER = "cityWeather";
 
-    @Value("${com.catapult.messaging.messageDlrCache.initialCapacity:100}")
+    @Value("${com.ifood.cache.initialCapacity}")
     private int initialCapacity;
 
-    @Value("${com.catapult.messaging.messageDlrCache.maximumSize:1000}")
+    @Value("${com.ifood.cache.maximumSize}")
     private int maximumSize;
 
-    @Value("${com.catapult.messaging.messageDlrCache.expireTtlSeconds:10}")
+    @Value("${com.ifood.cache.expireTtlSeconds}")
     private long expireTtlSeconds;
 
     @Bean(CITY_WEATHER)
