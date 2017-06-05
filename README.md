@@ -1,4 +1,24 @@
-#iFood Backend Java Test
+## Start
+`$mvn clean install spring-boot:run`
+aplicação na porta 8080
+`$curl localhost:8080/weather?city=campinas`
+JSON com informações do tempo para campinas
+- Cache Caffeine segura por 10 segundos todas requisições para uma mesma cidade (cache de vida curta)
+- Cache de Fallback (vida longa) guarda as cidades ja pesquisadas por um tempo maior para fallback
+
+
+Acompanhe o log do servidor executando estes:
+
+    1 - curl localhost:8080/weather?city=campinas -> feita requisicao para serviço terceiro
+    2 - curl localhost:8080/weather?city=campinas -> retorna a cidade (cache curta)
+    3 - 10 segundos após
+    4 - curl localhost:8080/weather?city=campinas -> nova requisicao para serviço terceiro atualizando cache curta para mais 10 segundos
+    5 - desconectar da internet
+    6 - até 60 minutos depois
+    7 - curl localhost:8080/weather?city=campinas -> retorna a cidade (cache longa)
+    8 - curl localhost:8080/weather?city=unknown -> Gracefull Shutdown Message
+
+# iFood Backend Java Test
 
 Este é um projeto base para demonstração de um micro-serviço RESTful fictício.
 

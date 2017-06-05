@@ -1,6 +1,6 @@
 package com.ifood.services;
 
-import static com.ifood.configuration.CacheConfiguration.CITY_WEATHER;
+import static com.ifood.configuration.CacheConfiguration.SHORT_LIVED_CITY_WEATHER;
 
 import com.ifood.models.CityWeather;
 
@@ -35,7 +35,7 @@ public class WeatherCheckService {
         this.asyncCompletionHandler = asyncCompletionHandler;
     }
 
-    @Cacheable(CITY_WEATHER)
+    @Cacheable(SHORT_LIVED_CITY_WEATHER)
     public CompletableFuture<CityWeather> getCityWeatherData(String cityName) {
         LOG.info("Querying Open Weather API for [{}]", cityName);
 

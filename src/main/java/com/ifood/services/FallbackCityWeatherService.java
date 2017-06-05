@@ -15,7 +15,7 @@ import java.util.Optional;
 public class FallbackCityWeatherService {
 
     @Autowired
-    @Qualifier(CacheConfiguration.FALLBACK_CITY_WEATHER)
+    @Qualifier(CacheConfiguration.LONG_LIVED_CITY_WEATHER)
     private CaffeineCache caffeineCache;
 
     public Optional<CityWeather> getWeather(String city) {

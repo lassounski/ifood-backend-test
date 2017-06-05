@@ -15,8 +15,8 @@ import java.util.concurrent.TimeUnit;
 @EnableCaching
 public class CacheConfiguration {
 
-    public static final String CITY_WEATHER = "cityWeather";
-    public static final String FALLBACK_CITY_WEATHER = "fallbackCityWeather";
+    public static final String SHORT_LIVED_CITY_WEATHER = "cityWeather";
+    public static final String LONG_LIVED_CITY_WEATHER = "fallbackCityWeather";
 
     @Value("${com.ifood.cache.initialCapacity}")
     private int initialCapacity;
@@ -36,23 +36,23 @@ public class CacheConfiguration {
     @Value("${com.ifood.fallback.cache.expireTtlSeconds}")
     private long expireFallbackTtlSeconds;
 
-    @Bean(CITY_WEATHER)
+    @Bean(SHORT_LIVED_CITY_WEATHER)
     public CaffeineCache cityWeatherCache() {
         Cache<Object, Object> cache = Caffeine.newBuilder()
                 .initialCapacity(initialCapacity)
                 .maximumSize(maximumSize)
                 .expireAfterWrite(expireTtlSeconds, TimeUnit.SECONDS)
                 .build();
-        return new CaffeineCache(CITY_WEATHER, cache);
+        return new CaffeineCache(SHORT_LIVED_CITY_WEATHER, cache);
     }
 
-    @Bean(FALLBACK_CITY_WEATHER)
+    @Bean(LONG_LIVED_CITY_WEATHER)
     public CaffeineCache cityFallbackWeatherCache() {
         Cache<Object, Object> cache = Caffeine.newBuilder()
                 .initialCapacity(initialFallbackCapacity)
                 .maximumSize(maximumFallbackSize)
                 .expireAfterAccess(expireFallbackTtlSeconds, TimeUnit.SECONDS)
                 .build();
-        return new CaffeineCache(FALLBACK_CITY_WEATHER, cache);
+        return new CaffeineCache(LONG_LIVED_CITY_WEATHER, cache);
     }
 }
