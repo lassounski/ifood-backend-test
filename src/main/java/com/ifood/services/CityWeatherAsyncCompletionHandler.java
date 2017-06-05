@@ -20,7 +20,6 @@ public class CityWeatherAsyncCompletionHandler extends AsyncCompletionHandler<Ci
     public CityWeather onCompleted(Response response) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         CityWeather cityWeather = objectMapper.readValue(response.getResponseBody(), CityWeather.class);
-        System.out.println("Completed response from AsyncHttpClient");
         fallbackCityWeatherService.setCityWeather(cityWeather.getCityName(), cityWeather);
 
         return cityWeather;
