@@ -44,8 +44,8 @@ public class WeatherCheckController {
                         } else {
                             LOG.error("No fallback response for city [{}].", city);
                             deferredResult.setResult(
-                                    new ResponseEntity<>("503" +
-                                            "Unfortunately the service that you are looking for is down." +
+                                    new ResponseEntity<>("503 -" +
+                                            " Unfortunately the service that you are looking for is down." +
                                             " We are doing our best to provide a solution.", HttpStatus.SERVICE_UNAVAILABLE));
                         }
                     }
