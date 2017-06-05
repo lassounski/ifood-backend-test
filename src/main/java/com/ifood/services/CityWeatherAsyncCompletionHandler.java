@@ -7,15 +7,23 @@ import org.asynchttpclient.AsyncCompletionHandler;
 import org.asynchttpclient.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class CityWeatherAsyncCompletionHandler extends AsyncCompletionHandler<CityWeather> {
 
     private static final Logger LOG = LoggerFactory.getLogger(CityWeatherAsyncCompletionHandler.class);
 
+    @Autowired
+    private FallbackCityWeatherService fallbackCityWeatherService;
+
     @Override
     public CityWeather onCompleted(Response response) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(response.getResponseBody(), CityWeather.class);
+        CityWeather cityWeather = objectMapper.readValue(response.getResponseBody(), CityWeather.class);
+        System.out.println("Completed response from AsyncHttpClient");
+        fallbackCityWeatherService.setCityWeather(cityWeather.getCityName(), cityWeather);
+
+        return cityWeather;
     }
 
     @Override

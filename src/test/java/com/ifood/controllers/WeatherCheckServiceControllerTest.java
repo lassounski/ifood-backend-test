@@ -4,7 +4,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,7 +41,6 @@ public class WeatherCheckServiceControllerTest {
                 .willReturn(CompletableFuture.completedFuture(getCityWeather()));
 
         MvcResult result = mockMvc.perform(get("/weather").param("city", "campinas"))
-                .andDo(print())
                 .andReturn();
 
         mockMvc.perform(asyncDispatch(result))
@@ -52,7 +50,7 @@ public class WeatherCheckServiceControllerTest {
     }
 
     @Test
-    public void shouldReturn503ifError() throws Exception {
+    public void shouldReturn503ifSomethingGoesWrong() throws Exception {
         given(weatherCheckService.getCityWeatherData(any()))
                 .willReturn(CompletableFuture.supplyAsync(() -> {
                     throwException();
@@ -60,7 +58,6 @@ public class WeatherCheckServiceControllerTest {
                 }));
 
         MvcResult result = mockMvc.perform(get("/weather").param("city", "campinas"))
-                .andDo(print())
                 .andReturn();
 
         mockMvc.perform(asyncDispatch(result))

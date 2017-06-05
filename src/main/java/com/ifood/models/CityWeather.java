@@ -5,16 +5,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import org.immutables.value.Value;
+import org.immutables.value.Value.Default;
+import org.immutables.value.Value.Immutable;
+import org.immutables.value.Value.Style;
 
 import java.util.List;
 
-@Value.Immutable
+@Immutable
 @JsonSerialize(as = ImmutableCityWeather.class)
 @JsonDeserialize(as = ImmutableCityWeather.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Value.Style(init = "with*")
+@Style(init = "with*")
 public abstract class CityWeather {
+
+    @Default
+    public CityWeatherStatus serviceStatus() {
+        return CityWeatherStatus.OK;
+    }
 
     @JsonProperty("name")
     public abstract String getCityName();
@@ -26,6 +33,6 @@ public abstract class CityWeather {
     public abstract Weather getWeather();
 
     public static ImmutableCityWeather.Builder builder() {
-        return CityWeather.builder();
+        return ImmutableCityWeather.builder();
     }
 }
